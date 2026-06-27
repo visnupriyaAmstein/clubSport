@@ -1,44 +1,47 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom" 
- 
-import Home from "../pages/Home" 
-import Login from "../pages/Login" 
+import { BrowserRouter, Routes, Route } from "react-router-dom"
+
+import Home from "../pages/Home"
+import Login from "../pages/Login"
 import Register from "../pages/Register"
+import Unauthorized from "../pages/Unauthorized"
 
+import UserDashboard from "../pages/user/UserDashboard"
+import CoachDashboard from "../pages/coach/CoachDashboard"
+import AdminDashboard from "../pages/admin/AdminDashboard"
 
- 
-import UserDashboard from "../pages/user/UserDashboard" 
-import CoachDashboard from "../pages/coach/CoachDashboard" 
-import AdminDashboard from "../pages/admin/AdminDashboard" 
- 
-import UserLayout from "../layouts/UserLayout" 
-import CoachLayout from "../layouts/CoachLayout" 
-import AdminLayout from "../layouts/AdminLayout" 
- 
-function AppRoutes() { 
-  return ( 
-    <BrowserRouter> 
-      <Routes> 
-        <Route path="/" element={<Home />} /> 
-        <Route path="/login" element={<Login />} /> 
+import UserLayout from "../layouts/UserLayout"
+import CoachLayout from "../layouts/CoachLayout"
+import AdminLayout from "../layouts/AdminLayout"
 
-        <Route path="/register" element={<Register />} /> 
+import RoleRoute from "./RoleRoute"
+
+function AppRoutes() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        {/* Public routes */}
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
- 
-        <Route path="/user" element={<UserLayout />}> 
-          <Route path="dashboard" element={<UserDashboard />} /> 
-          <Route path="visnu" element={<h1>hola</h1>} />
-        </Route> 
- 
-        <Route path="/coach" element={<CoachLayout />}> 
-          <Route path="dashboard" element={<CoachDashboard />} /> 
-        </Route> 
- 
-        <Route path="/admin" element={<AdminLayout />}> 
-          <Route path="dashboard" element={<AdminDashboard />} /> 
-        </Route> 
-      </Routes> 
-    </BrowserRouter> 
-  ) 
-} 
- 
-export default AppRoutes 
+        <Route path="/unauthorized" element={<Unauthorized />} />
+
+        {/* User routes */}
+        <Route path="/user" element={<RoleRoute allowedRoles={["user"]}><UserLayout /></RoleRoute>}>
+          <Route path="dashboard" element={<UserDashboard />} />
+        </Route>
+
+        {/* Coach routes */}
+        <Route path="/coach" element={<RoleRoute allowedRoles={["coach"]}><CoachLayout /></RoleRoute>}>
+          <Route path="dashboard" element={<CoachDashboard />} />
+        </Route>
+
+        {/* Admin routes */}
+        <Route path="/admin" element={<RoleRoute allowedRoles={["admin"]}><AdminLayout /></RoleRoute>}>
+          <Route path="dashboard" element={<AdminDashboard />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
+  )
+}
+
+export default AppRoutes
