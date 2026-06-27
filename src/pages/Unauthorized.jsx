@@ -1,18 +1,18 @@
 import { Link } from "react-router-dom"
-import { Alert, Button, Container } from "react-bootstrap"
 
 function Unauthorized() {
-    return (
-        <Container className="mt-5">
-            <Alert variant="danger">
-                <Alert.Heading>Acceso no autorizado</Alert.Heading>
-                <p>No tienes permisos para acceder a esta sección.</p>
-                <Link to="login">
-                    <Button variant="danger">Volver al login</Button>
-                </Link>
-            </Alert>
-        </Container>
-    )
+  return (
+    <div className="min-vh-100 d-flex align-items-center justify-content-center" style={{ background: "#f0f2f5" }}>
+      <div className="text-center p-5 bg-white rounded-4 shadow-sm">
+        <div style={{ fontSize: "48px" }}>🚫</div>
+        <h4 className="fw-medium mt-3" style={{ color: "#1a1a1a" }}>Acceso no autorizado</h4>
+        <p className="text-muted" style={{ fontSize: "14px" }}>No tienes permisos para acceder a esta sección.</p>
+        <Link to="/login" className="btn mt-2" style={{ background: "#3cd16f", color: "#0a110c", borderRadius: "8px", fontSize: "14px" }}>
+          Volver al login
+        </Link>
+      </div>
+    </div>
+  )
 }
 
 export default Unauthorized
