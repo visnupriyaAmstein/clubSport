@@ -1,47 +1,63 @@
-const API_URL = "http://localhost:3000/api/auth"
+const API_URL = "/api/auth"
 
-//Login contra el backend
+// Login
 export async function loginUser(credentials) {
-    const response = await fetch(`${API_URL}/login`,{
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify(credentials), 
-    })
-
-    const data = await response.json()
-
-    if (!response.ok) {
-        throw new Error(data.message || "Error al iniciar sesión")
-    }
-    return data 
+  const response = await fetch(`${API_URL}/login`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(credentials),
+  })
+  const data = await response.json()
+  if (!response.ok) throw new Error(data.message || "Error al iniciar sesión")
+  return data
 }
 
-//guardar sesión en el navegador
-export const saveSession = (token, user) => {
-    localStorage.setItem("token", token);
-    localStorage.setItem("user", JSON.stringify(user));
-};
+// Registri
+export async function registerUser(form) {
+  const payload = {
+    full_name: `${form.nombre} ${form.apellido}`,
+    email: form.email,
+    password: form.password,
+    birth_date: form.fechaNacimiento,
+    metadata: {
+      sports: form.deportes.map((name) => ({ name, frequency_per_week: 1 })),
+    },
+  }
 
-//obtener token
-export const getToken = () => {
-    return localStorage.getItem("token");
+  const response = await fetch(`${API_URL}/register`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  })
+  const data = await response.json()
+  if (!response.ok) throw new Error(data.message || "Error al registrarse")
+  return data
 }
 
-//obtener usuario
-export const getUser = () => {
-    const user = localStorage.getItem("user");
-    return user ? JSON.parse(user) : null;
-};
-
-//verificar si existe sesión 
-export const isAuthenticated = () => {
-    return Boolean(getToken());
+// guardar la sesion en browser
+export function saveSession(token, user) {
+  localStorage.setItem("token", token)
+  localStorage.setItem("user", JSON.stringify(user))
 }
 
-//cerrar sesión
-export const logout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
+// Get token
+export function getToken() {
+  return localStorage.getItem("token")
+}
+
+// Get user
+export function getUser() {
+  const user = localStorage.getItem("user")
+  return user ? JSON.parse(user) : null
+}
+
+// mirar si la sesion existe
+export function isAuthenticated() {
+  return Boolean(getToken())
+}
+
+// Logout
+export function logout() {
+  localStorage.removeItem("token")
+  localStorage.removeItem("user")
 }
