@@ -13,7 +13,14 @@ function AdminLayout() {
   const [showProfile, setShowProfile] = useState(false)
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}>
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        minHeight: "100vh",
+        background: colors.bg,     
+      }}
+    >
       <TopBar
         user={user}
         colors={colors}
@@ -27,10 +34,19 @@ function AdminLayout() {
           roleLabel={label}
           onOpenProfile={() => setShowProfile(true)}
         />
-        <main style={{ flex: 1, padding: "24px", background: "#f0f2f5" }}>
+        {/* Main content — slightly lighter than sidebar */}
+        <main
+          style={{
+            flex: 1,
+            padding: "24px",
+            background: "rgba(0,0,0,0.15)",
+            minHeight: "calc(100vh - 56px)",  
+          }}
+        >
           <Outlet />
         </main>
       </div>
+
       <ProfileModal
         show={showProfile}
         onHide={() => setShowProfile(false)}

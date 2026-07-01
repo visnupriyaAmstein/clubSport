@@ -1,51 +1,57 @@
-// Central configuration for each role — colors, menus, and labels
-// To add a new role or change a color, only edit this file
-
 export const ROLES_CONFIG = {
   user: {
     label: "Usuario",
     colors: {
-      primary:    "#185FA5",
-      secondary:  "#378ADD",
-      light:      "#E6F1FB",
-      text:       "#E6F1FB",
-      textMuted:  "#B5D4F4",
-      textDark:   "#0C447C",
+      bg:        "#0B1F1F",   // dark teal bg
+      surface:   "rgba(255,255,255,0.05)",
+      border:    "rgba(255,255,255,0.08)",
+      primary:   "#138690",
+      secondary: "#22B6C2",
+      light:     "#E1F5EE",
+      text:      "#C9DCDC",
+      textMuted: "#8FB3B3",
+      textDark:  "#085041",
     },
     menuItems: [
-      { label: "Dashboard",        icon: "ti-layout-dashboard", path: "/user/dashboard" },
-      { label: "Mis clases",       icon: "ti-calendar",         path: "/user/clases" },
-      { label: "Clases disponibles", icon: "ti-list-search",    path: "/user/disponibles" },
+      { label: "Dashboard",          icon: "ti-layout-dashboard", path: "/user/dashboard" },
+      { label: "Mis clases",         icon: "ti-calendar",         path: "/user/clases" },
+      { label: "Clases disponibles", icon: "ti-list-search",      path: "/user/disponibles" },
     ],
   },
 
   coach: {
     label: "Coach",
     colors: {
-      primary:    "#3B6D11",
-      secondary:  "#639922",
-      light:      "#EAF3DE",
-      text:       "#EAF3DE",
-      textMuted:  "#C0DD97",
-      textDark:   "#27500A",
+      bg:        "#0F2418",   // dark green bg
+      surface:   "rgba(255,255,255,0.05)",
+      border:    "rgba(255,255,255,0.08)",
+      primary:   "#4ADE80",
+      secondary: "#86EFAC",
+      light:     "#EAF3DE",
+      text:      "#C9D6CD",
+      textMuted: "#9BB0A4",
+      textDark:  "#27500A",
     },
     menuItems: [
-      { label: "Dashboard",      icon: "ti-layout-dashboard", path: "/coach/dashboard" },
-      { label: "Mis clases",     icon: "ti-calendar-event",   path: "/coach/clases" },
-      { label: "Mis alumnos",    icon: "ti-users",            path: "/coach/alumnos" },
-      { label: "Horarios",       icon: "ti-clock",            path: "/coach/horarios" },
+      { label: "Dashboard",   icon: "ti-layout-dashboard", path: "/coach/dashboard" },
+      { label: "Mis clases",  icon: "ti-calendar-event",   path: "/coach/clases" },
+      { label: "Mis alumnos", icon: "ti-users",            path: "/coach/alumnos" },
+      { label: "Horarios",    icon: "ti-clock",            path: "/coach/horarios" },
     ],
   },
 
   admin: {
     label: "Administrador",
     colors: {
-      primary:    "#854F0B",
-      secondary:  "#BA7517",
-      light:      "#FAEEDA",
-      text:       "#FAEEDA",
-      textMuted:  "#FAC775",
-      textDark:   "#633806",
+      bg:        "#241712",   // dark terracota bg
+      surface:   "rgba(255,255,255,0.05)",
+      border:    "rgba(255,255,255,0.08)",
+      primary:   "#CB6C32",
+      secondary: "#E58A52",
+      light:     "#FAEEDA",
+      text:      "#E3D2C8",
+      textMuted: "#C2A294",
+      textDark:  "#633806",
     },
     menuItems: [
       { label: "Dashboard", icon: "ti-layout-dashboard", path: "/admin/dashboard" },

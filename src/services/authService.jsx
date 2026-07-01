@@ -1,4 +1,4 @@
-const API_URL = "/api/auth"
+const API_URL = "http://localhost:3000/api/auth";
 
 // Login
 export async function loginUser(credentials) {
@@ -12,7 +12,7 @@ export async function loginUser(credentials) {
   return data
 }
 
-// Registri
+// Registrio
 export async function registerUser(form) {
   const payload = {
     full_name: `${form.nombre} ${form.apellido}`,

@@ -77,7 +77,7 @@ function RegisterForm() {
   }
 
   return (
-    <div className="card-body p-4 bg-white">
+    <div className="col-md-7 card-body p-4 overflow-auto bg-white" style={{ maxHeight: "90vh" }}>
 
       {error && (
         <div className="alert alert-danger py-2 mb-3" style={{ fontSize: "13px", borderRadius: "8px" }}>
