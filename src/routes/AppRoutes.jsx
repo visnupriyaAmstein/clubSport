@@ -5,10 +5,23 @@ import Login       from "../pages/Login"
 import Register    from "../pages/Register"
 import Unauthorized from "../pages/Unauthorized"
 
-import UserDashboard  from "../pages/user/UserDashboard"
-import CoachDashboard from "../pages/coach/CoachDashboard"
+// Admin
 import AdminDashboard from "../pages/admin/AdminDashboard"
-import UsersPage      from "../pages/admin/UsersPage"        // ← nuevo
+import UsersPage      from "../pages/admin/UsersPage"
+import RoomsPage      from "../pages/admin/RoomsPage"
+import SportsPage     from "../pages/admin/SportsPage"
+import SchedulesPage  from "../pages/admin/SchedulesPage"
+import SportRoomsPage from "../pages/admin/SportRoomsPage"
+
+// Coach
+import CoachDashboard from "../pages/coach/CoachDashboard"
+import MyClassesPage  from "../pages/coach/MyClassesPage"
+import MySchedulePage from "../pages/coach/MySchedulePage"
+
+// User
+import UserDashboard         from "../pages/user/UserDashboard"
+import AvailableClassesPage  from "../pages/user/AvailableClassesPage"
+import MyReservationsPage    from "../pages/user/MyReservationsPage"
 
 import AuthLayout  from "../layouts/AuthLayout"
 import UserLayout  from "../layouts/UserLayout"
@@ -37,7 +50,9 @@ function AppRoutes() {
           path="/user"
           element={<RoleRoute allowedRoles={["user"]}><UserLayout /></RoleRoute>}
         >
-          <Route path="dashboard"   element={<UserDashboard />} />
+          <Route path="dashboard"    element={<UserDashboard />} />
+          <Route path="disponibles"  element={<AvailableClassesPage />} />
+          <Route path="reservas"     element={<MyReservationsPage />} />
         </Route>
 
         {/* Coach */}
@@ -46,6 +61,8 @@ function AppRoutes() {
           element={<RoleRoute allowedRoles={["coach"]}><CoachLayout /></RoleRoute>}
         >
           <Route path="dashboard" element={<CoachDashboard />} />
+          <Route path="clases"    element={<MyClassesPage />} />
+          <Route path="horarios"  element={<MySchedulePage />} />
         </Route>
 
         {/* Admin */}
@@ -53,8 +70,12 @@ function AppRoutes() {
           path="/admin"
           element={<RoleRoute allowedRoles={["admin"]}><AdminLayout /></RoleRoute>}
         >
-          <Route path="dashboard" element={<AdminDashboard />} />
-          <Route path="usuarios"  element={<UsersPage />} />   {/* ← nuevo */}
+          <Route path="dashboard"    element={<AdminDashboard />} />
+          <Route path="usuarios"     element={<UsersPage />} />
+          <Route path="salas"        element={<RoomsPage />} />
+          <Route path="deportes"     element={<SportsPage />} />
+          <Route path="horarios"     element={<SchedulesPage />} />
+          <Route path="asignaciones" element={<SportRoomsPage />} />
         </Route>
 
       </Routes>
