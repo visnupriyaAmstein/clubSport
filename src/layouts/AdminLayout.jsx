@@ -1,3 +1,4 @@
+
 import { useState } from "react"
 import { Outlet } from "react-router-dom"
 import { getUser } from "../services/authService"
@@ -9,24 +10,15 @@ import ProfileModal from "../components/ProfileModal"
 const { colors, menuItems, label } = ROLES_CONFIG.admin
 
 function AdminLayout() {
-  const user = getUser()
+
+  const [user, setUser] = useState(getUser())
   const [showProfile, setShowProfile] = useState(false)
 
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        minHeight: "100vh",
-        background: colors.bg,     
-      }}
-    >
-      <TopBar
-        user={user}
-        colors={colors}
-        onOpenProfile={() => setShowProfile(true)}
-      />
-      <div style={{ display: "flex", flex: 1 }}>
+    <div style={{ display: "flex", flexDirection: "column", minHeight: "100vh", background: colors.bg }}>
+      <TopBar user={user} colors={colors} onOpenProfile={() => setShowProfile(true)} />
+     
+      <div style={{ display: "flex", flex: 1, minHeight: "calc(100vh - 52px)" }}>
         <Sidebar
           user={user}
           colors={colors}
@@ -34,24 +26,16 @@ function AdminLayout() {
           roleLabel={label}
           onOpenProfile={() => setShowProfile(true)}
         />
-        {/* Main content — slightly lighter than sidebar */}
-        <main
-          style={{
-            flex: 1,
-            padding: "24px",
-            background: "rgba(0,0,0,0.15)",
-            minHeight: "calc(100vh - 56px)",  
-          }}
-        >
+        <main style={{ flex: 1, padding: "24px", background: "rgba(0,0,0,0.15)" }}>
           <Outlet />
         </main>
       </div>
-
       <ProfileModal
         show={showProfile}
         onHide={() => setShowProfile(false)}
         user={user}
         colors={colors}
+        onUserUpdated={setUser}
       />
     </div>
   )

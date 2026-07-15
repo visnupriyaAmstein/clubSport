@@ -2,8 +2,6 @@ import { useState } from "react"
 import { Modal, Form, Spinner } from "react-bootstrap"
 import { updateMyProfile } from "../services/userService"
 
-// ── Helpers ───────────────────────────────────────────────────────────────────
-
 function formatDate(dateStr) {
   if (!dateStr) return "—"
   const [year, month, day] = dateStr.split("-")
@@ -20,9 +18,7 @@ function getInitials(name = "") {
     .toUpperCase()
 }
 
-// ── Component ─────────────────────────────────────────────────────────────────
-
-function ProfileModal({ show, onHide, user, colors }) {
+function ProfileModal({ show, onHide, user, colors, onUserUpdated }) {
   const [editing, setEditing]   = useState(false)
   const [saving, setSaving]     = useState(false)
   const [formData, setFormData] = useState({})
@@ -31,8 +27,6 @@ function ProfileModal({ show, onHide, user, colors }) {
   if (!user) return null
 
   const initials = getInitials(user.full_name)
-
-  // Enter edit mode — pre-fill form with current values
   const handleStartEdit = () => {
     setFormData({
       full_name:  user.full_name  || "",
@@ -53,7 +47,6 @@ function ProfileModal({ show, onHide, user, colors }) {
     setFormData((prev) => ({ ...prev, [name]: value }))
   }
 
-  // Save changes — calls PUT /api/users/:id
   const handleSave = async () => {
     if (!formData.full_name.trim() || !formData.email.trim()) {
       setError("El nombre y el correo son obligatorios.")
@@ -62,16 +55,15 @@ function ProfileModal({ show, onHide, user, colors }) {
     try {
       setSaving(true)
       setError("")
-      const updated = await updateMyProfile(user.id, formData)
+      const updated = await updateMyProfile(formData)
+      const stored     = JSON.parse(localStorage.getItem("user") || "{}")
+      const newUser    = { ...stored, ...(updated.data ?? formData) }
+      localStorage.setItem("user", JSON.stringify(newUser))
 
-      // Update the stored user in localStorage so the app reflects changes
-      const stored = JSON.parse(localStorage.getItem("user") || "{}")
-      localStorage.setItem("user", JSON.stringify({ ...stored, ...updated.data ?? formData }))
+      onUserUpdated?.(newUser)
 
       setEditing(false)
       onHide()
-      // Reload so TopBar / Sidebar pick up new name
-      window.location.reload()
     } catch (err) {
       setError(err.message || "Error al guardar los cambios.")
     } finally {
@@ -79,7 +71,6 @@ function ProfileModal({ show, onHide, user, colors }) {
     }
   }
 
-  // ── Input style (reused across fields) ────────────────────────────────────
   const inputStyle = {
     background: "rgba(255,255,255,0.07)",
     border: "0.5px solid rgba(255,255,255,0.15)",
@@ -94,11 +85,9 @@ function ProfileModal({ show, onHide, user, colors }) {
     marginBottom: "4px",
   }
 
-  // ── Render ─────────────────────────────────────────────────────────────────
   return (
     <Modal show={show} onHide={onHide} centered>
 
-      {/* ── Hero ──────────────────────────────────────────────────────────── */}
       <div
         style={{
           background: colors.primary,
@@ -142,7 +131,6 @@ function ProfileModal({ show, onHide, user, colors }) {
         </div>
       </div>
 
-      {/* ── Body ──────────────────────────────────────────────────────────── */}
       <Modal.Body
         style={{
           padding: "16px",
@@ -150,7 +138,7 @@ function ProfileModal({ show, onHide, user, colors }) {
         }}
       >
         {editing ? (
-          /* ── Edit form ─────────────────────────────────────────────────── */
+          
           <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
 
             <Form.Group>
@@ -191,7 +179,6 @@ function ProfileModal({ show, onHide, user, colors }) {
             )}
           </div>
         ) : (
-          /* ── Read-only view ────────────────────────────────────────────── */
           [
             { icon: "ti-mail",     label: "Correo",     value: user.email },
             { icon: "ti-calendar", label: "Nacimiento", value: formatDate(user.birth_date) },
@@ -222,7 +209,7 @@ function ProfileModal({ show, onHide, user, colors }) {
         )}
       </Modal.Body>
 
-      {/* ── Footer ────────────────────────────────────────────────────────── */}
+      {/* Footer*/}
       <Modal.Footer
         style={{
           padding: "12px 16px",

@@ -9,17 +9,14 @@ import ProfileModal from "../components/ProfileModal"
 const { colors, menuItems, label } = ROLES_CONFIG.user
 
 function UserLayout() {
-  const user = getUser()
+
+  const [user, setUser] = useState(getUser())
   const [showProfile, setShowProfile] = useState(false)
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}>
-      <TopBar
-        user={user}
-        colors={colors}
-        onOpenProfile={() => setShowProfile(true)}
-      />
-      <div style={{ display: "flex", flex: 1 }}>
+    <div style={{ display: "flex", flexDirection: "column", minHeight: "100vh", background: colors.bg }}>
+      <TopBar user={user} colors={colors} onOpenProfile={() => setShowProfile(true)} />
+      <div style={{ display: "flex", flex: 1, minHeight: "calc(100vh - 52px)" }}>
         <Sidebar
           user={user}
           colors={colors}
@@ -27,7 +24,7 @@ function UserLayout() {
           roleLabel={label}
           onOpenProfile={() => setShowProfile(true)}
         />
-        <main style={{ flex: 1, padding: "24px", background: "#f0f2f5" }}>
+        <main style={{ flex: 1, padding: "24px", background: "rgba(0,0,0,0.15)" }}>
           <Outlet />
         </main>
       </div>
@@ -36,6 +33,7 @@ function UserLayout() {
         onHide={() => setShowProfile(false)}
         user={user}
         colors={colors}
+        onUserUpdated={setUser}
       />
     </div>
   )
