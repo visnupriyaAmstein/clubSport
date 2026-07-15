@@ -17,23 +17,23 @@ function Sidebar({ user, colors, menuItems, roleLabel, onOpenProfile }) {
       style={{
         width: "210px",
         flexShrink: 0,
-        background: "#fff",
-        borderRight: "0.5px solid #e9ecef",
+        background: colors.bg,
+        borderRight: `0.5px solid ${colors.border}`,
         display: "flex",
         flexDirection: "column",
         padding: "16px 0",
-        height: "100%",
+        alignSelf: "stretch",
       }}
     >
       {/* User info */}
-      <div style={{ padding: "0 16px 16px", borderBottom: "0.5px solid #e9ecef", marginBottom: "8px" }}>
+      <div style={{ padding: "0 16px 16px", borderBottom: `0.5px solid ${colors.border}`, marginBottom: "8px" }}>
         <div
           style={{
             width: "44px",
             height: "44px",
             borderRadius: "50%",
-            background: colors.light,
-            color: colors.textDark,
+            background: colors.primary,
+            color: "#fff",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
@@ -44,10 +44,10 @@ function Sidebar({ user, colors, menuItems, roleLabel, onOpenProfile }) {
         >
           {initials}
         </div>
-        <div style={{ fontSize: "13px", fontWeight: "500", color: "#1a1a1a" }}>
+        <div style={{ fontSize: "13px", fontWeight: "500", color: colors.text }}>
           {user?.full_name || "Usuario"}
         </div>
-        <div style={{ fontSize: "11px", color: "#9ca3af", marginTop: "2px" }}>
+        <div style={{ fontSize: "11px", color: colors.textMuted, marginTop: "2px" }}>
           {roleLabel}
         </div>
       </div>
@@ -57,7 +57,7 @@ function Sidebar({ user, colors, menuItems, roleLabel, onOpenProfile }) {
         style={{
           fontSize: "10px",
           fontWeight: "500",
-          color: "#9ca3af",
+          color: colors.textMuted,
           letterSpacing: "0.5px",
           textTransform: "uppercase",
           padding: "8px 16px 4px",
@@ -66,7 +66,7 @@ function Sidebar({ user, colors, menuItems, roleLabel, onOpenProfile }) {
         Principal
       </span>
 
-      {/* Menu items */}
+      {/* Menu items  */}
       {menuItems.map(({ label, icon, path }) => (
         <NavLink
           key={path}
@@ -75,13 +75,14 @@ function Sidebar({ user, colors, menuItems, roleLabel, onOpenProfile }) {
             display: "flex",
             alignItems: "center",
             gap: "8px",
-            padding: "8px 16px",
+            margin: "2px 10px",
+            padding: "8px 10px",
+            borderRadius: "8px",
             fontSize: "13px",
             textDecoration: "none",
-            color: isActive ? colors.primary : "#6c757d",
-            background: isActive ? colors.light : "transparent",
+            color: isActive ? "#fff" : colors.textMuted,
+            background: isActive ? colors.primary : "transparent",
             fontWeight: isActive ? "500" : "400",
-            borderLeft: isActive ? `3px solid ${colors.primary}` : "3px solid transparent",
             transition: "all 0.15s",
           })}
         >
@@ -91,14 +92,14 @@ function Sidebar({ user, colors, menuItems, roleLabel, onOpenProfile }) {
       ))}
 
       {/* Divider */}
-      <div style={{ height: "0.5px", background: "#e9ecef", margin: "8px 0" }} />
+      <div style={{ height: "0.5px", background: colors.border, margin: "8px 0" }} />
 
       {/* Account section */}
       <span
         style={{
           fontSize: "10px",
           fontWeight: "500",
-          color: "#9ca3af",
+          color: colors.textMuted,
           letterSpacing: "0.5px",
           textTransform: "uppercase",
           padding: "4px 16px",
@@ -113,15 +114,16 @@ function Sidebar({ user, colors, menuItems, roleLabel, onOpenProfile }) {
           display: "flex",
           alignItems: "center",
           gap: "8px",
-          padding: "8px 16px",
+          margin: "2px 10px",
+          padding: "8px 10px",
+          borderRadius: "8px",
           fontSize: "13px",
-          color: colors.primary,
+          color: colors.secondary,
           background: "none",
           border: "none",
           cursor: "pointer",
           textAlign: "left",
-          width: "100%",
-          borderLeft: "3px solid transparent",
+          width: "calc(100% - 20px)",
         }}
       >
         <i className="ti ti-user-circle" aria-hidden="true" style={{ fontSize: "16px" }} />
