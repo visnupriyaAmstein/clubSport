@@ -1,7 +1,4 @@
-// src/services/userService.js
-// Handles all API calls for user management (Admin CRUD)
-
-const API_URL = "http://localhost:3000/api/users"
+const BASE = "http://localhost:3000/api"
 
 function getToken() {
   return localStorage.getItem("token")
@@ -14,8 +11,9 @@ function getHeaders() {
   }
 }
 
+
 export async function getUsers() {
-  const response = await fetch(API_URL, {
+  const response = await fetch(`${BASE}/users`, {
     method: "GET",
     headers: getHeaders(),
   })
@@ -23,8 +21,18 @@ export async function getUsers() {
   return response.json()
 }
 
+export async function getUserById(id) {
+  const response = await fetch(`${BASE}/users/${id}`, {
+    method: "GET",
+    headers: getHeaders(),
+  })
+  const data = await response.json()
+  if (!response.ok) throw new Error(data.message || "Error al obtener usuario")
+  return data
+}
+
 export async function createUser(userData) {
-  const response = await fetch(API_URL, {
+  const response = await fetch(`${BASE}/users`, {
     method: "POST",
     headers: getHeaders(),
     body: JSON.stringify(userData),
@@ -35,7 +43,7 @@ export async function createUser(userData) {
 }
 
 export async function updateUser(id, userData) {
-  const response = await fetch(`${API_URL}/${id}`, {
+  const response = await fetch(`${BASE}/users/${id}`, {
     method: "PUT",
     headers: getHeaders(),
     body: JSON.stringify(userData),
@@ -46,7 +54,7 @@ export async function updateUser(id, userData) {
 }
 
 export async function deleteUser(id) {
-  const response = await fetch(`${API_URL}/${id}`, {
+  const response = await fetch(`${BASE}/users/${id}`, {
     method: "DELETE",
     headers: getHeaders(),
   })
@@ -54,14 +62,36 @@ export async function deleteUser(id) {
   return true
 }
 
-// Updates the currently logged-in user's own profile
-export async function updateMyProfile(id, userData) {
-  const response = await fetch(`${API_URL}/${id}`, {
+export async function getMyProfile() {
+  const response = await fetch(`${BASE}/auth/me`, {
+    method: "GET",
+    headers: getHeaders(),
+  })
+  const data = await response.json()
+  if (!response.ok) throw new Error(data.message || "Error al obtener perfil")
+  return data
+}
+
+export async function updateMyProfile(userData) {
+  
+  const response = await fetch(`${BASE}/auth/me`, {
     method: "PUT",
     headers: getHeaders(),
     body: JSON.stringify(userData),
   })
   const data = await response.json()
   if (!response.ok) throw new Error(data.message || "Error al actualizar perfil")
+  return data
+}
+
+export async function updateMyPassword(passwords) {
+  
+  const response = await fetch(`${BASE}/auth/me/password`, {
+    method: "PUT",
+    headers: getHeaders(),
+    body: JSON.stringify(passwords),
+  })
+  const data = await response.json()
+  if (!response.ok) throw new Error(data.message || "Error al cambiar contraseña")
   return data
 }

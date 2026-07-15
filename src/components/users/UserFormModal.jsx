@@ -1,51 +1,61 @@
 // src/components/users/UserFormModal.jsx
-// Reusable modal for creating and editing users (Admin role)
-// Used by UsersPage — same component handles both create and edit
+// Fixes: email never pre-filled, birth_date added, select options dark, all SweetAlerts terracota
 
 import { useEffect, useState } from "react"
 import { Button, Form, Modal } from "react-bootstrap"
 
 const initialForm = {
-  full_name: "",
-  email: "",
-  role: "user",
-  password: "",
+  full_name:  "",
+  email:      "",
+  role:       "user",
+  password:   "",
+  birth_date: "",
 }
 
-// Dark style helpers — keeps JSX clean
+const BG   = "#241712"
+const BORDER = "0.5px solid rgba(203,108,50,0.25)"
+const ACCENT = "#CB6C32"
+
 const inputStyle = {
-  background: "rgba(255,255,255,0.06)",
-  border: "0.5px solid rgba(255,255,255,0.12)",
-  color: "#fff",
-  fontSize: "13px",
+  background:  "rgba(255,255,255,0.06)",
+  border:      "0.5px solid rgba(255,255,255,0.12)",
+  color:       "#fff",
+  fontSize:    "13px",
+  borderRadius:"8px",
 }
 
 const labelStyle = {
-  color: "#C2A294",
-  fontSize: "12px",
+  color:      "#C2A294",
+  fontSize:   "12px",
   marginBottom: "4px",
+}
+
+// Forces option elements to be visible in dark selects
+const selectStyle = {
+  ...inputStyle,
+  colorScheme: "dark",   // ← key fix for Firefox / Chrome dark mode
 }
 
 function UserFormModal({ show, handleClose, handleSave, selectedUser }) {
   const [formData, setFormData] = useState(initialForm)
 
-  // Pre-fill form when editing; reset when creating
   useEffect(() => {
     if (selectedUser) {
       setFormData({
-        full_name: selectedUser.full_name || "",
-        email:     selectedUser.email     || "",
-        role:      selectedUser.role      || "user",
-        password:  "",
+        full_name:  selectedUser.full_name  || "",
+        email:      selectedUser.email      || "",
+        role:       selectedUser.role       || "user",
+        password:   "",                             // never carry old password
+        birth_date: selectedUser.birth_date || "",
       })
     } else {
-      setFormData(initialForm)
+      setFormData(initialForm)                      // always blank for create
     }
   }, [selectedUser, show])
 
   const handleChange = (e) => {
     const { name, value } = e.target
-    setFormData({ ...formData, [name]: value })
+    setFormData((prev) => ({ ...prev, [name]: value }))
   }
 
   const onSubmit = (e) => {
@@ -57,26 +67,20 @@ function UserFormModal({ show, handleClose, handleSave, selectedUser }) {
     <Modal show={show} onHide={handleClose} centered>
 
       {/* Header */}
-      <Modal.Header
-        closeButton
-        style={{
-          background: "#241712",
-          borderBottom: "0.5px solid rgba(203,108,50,0.25)",
-        }}
-      >
+      <Modal.Header closeButton style={{ background: BG, borderBottom: BORDER }}>
         <Modal.Title style={{ color: "#fff", fontSize: "15px", fontWeight: 500 }}>
           <i
             className={`ti ${selectedUser ? "ti-pencil" : "ti-user-plus"}`}
-            style={{ marginRight: "8px", color: "#CB6C32" }}
+            style={{ marginRight: "8px", color: ACCENT }}
           />
           {selectedUser ? "Editar Usuario" : "Nuevo Usuario"}
         </Modal.Title>
       </Modal.Header>
 
-      {/* Form */}
       <Form onSubmit={onSubmit}>
-        <Modal.Body style={{ background: "#241712", padding: "20px" }}>
+        <Modal.Body style={{ background: BG, padding: "20px" }}>
 
+          {/* Full name */}
           <Form.Group className="mb-3">
             <Form.Label style={labelStyle}>Nombre Completo</Form.Label>
             <Form.Control
@@ -85,11 +89,13 @@ function UserFormModal({ show, handleClose, handleSave, selectedUser }) {
               value={formData.full_name}
               onChange={handleChange}
               placeholder="Ej: María González"
+              autoComplete="off"
               required
               style={inputStyle}
             />
           </Form.Group>
 
+          {/* Email — autoComplete="new-password" prevents browser from filling admin's email */}
           <Form.Group className="mb-3">
             <Form.Label style={labelStyle}>Correo electrónico</Form.Label>
             <Form.Control
@@ -98,12 +104,25 @@ function UserFormModal({ show, handleClose, handleSave, selectedUser }) {
               value={formData.email}
               onChange={handleChange}
               placeholder="correo@ejemplo.com"
+              autoComplete="new-password"
               required
               style={inputStyle}
             />
           </Form.Group>
 
-          {/* Password only shown when creating — not when editing */}
+          {/* Birth date */}
+          <Form.Group className="mb-3">
+            <Form.Label style={labelStyle}>Fecha de nacimiento</Form.Label>
+            <Form.Control
+              type="date"
+              name="birth_date"
+              value={formData.birth_date}
+              onChange={handleChange}
+              style={inputStyle}
+            />
+          </Form.Group>
+
+          {/* Password — only on create */}
           {!selectedUser && (
             <Form.Group className="mb-3">
               <Form.Label style={labelStyle}>Contraseña</Form.Label>
@@ -113,35 +132,26 @@ function UserFormModal({ show, handleClose, handleSave, selectedUser }) {
                 value={formData.password}
                 onChange={handleChange}
                 placeholder="Mínimo 6 caracteres"
+                autoComplete="new-password"
                 required
                 style={inputStyle}
               />
             </Form.Group>
           )}
 
+          {/* Role select — colorScheme dark keeps options readable */}
           <Form.Group className="mb-1">
             <Form.Label style={labelStyle}>Rol</Form.Label>
-            <Form.Select
-              name="role"
-              value={formData.role}
-              onChange={handleChange}
-              style={inputStyle}
-            >
-              <option value="user">Usuario</option>
-              <option value="coach">Coach</option>
-              <option value="admin">Administrador</option>
+            <Form.Select name="role" value={formData.role} onChange={handleChange} style={selectStyle}>
+              <option value="user"  style={{ background: "#2a1a12", color: "#fff" }}>Usuario</option>
+              <option value="coach" style={{ background: "#2a1a12", color: "#fff" }}>Coach</option>
+              <option value="admin" style={{ background: "#2a1a12", color: "#fff" }}>Administrador</option>
             </Form.Select>
           </Form.Group>
 
         </Modal.Body>
 
-        <Modal.Footer
-          style={{
-            background: "#241712",
-            borderTop: "0.5px solid rgba(203,108,50,0.25)",
-            gap: "8px",
-          }}
-        >
+        <Modal.Footer style={{ background: BG, borderTop: BORDER, gap: "8px" }}>
           <Button
             variant="secondary"
             onClick={handleClose}
@@ -153,12 +163,7 @@ function UserFormModal({ show, handleClose, handleSave, selectedUser }) {
           <Button
             type="submit"
             size="sm"
-            style={{
-              background: "#CB6C32",
-              border: "none",
-              fontSize: "13px",
-              padding: "6px 18px",
-            }}
+            style={{ background: ACCENT, border: "none", fontSize: "13px", padding: "6px 18px" }}
           >
             <i className="ti ti-check" style={{ marginRight: "5px" }} />
             Guardar
