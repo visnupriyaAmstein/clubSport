@@ -1,4 +1,3 @@
-// Left panel shared by Login and Register
 function AuthLeftPanel() {
   const stats = [
     ["1.2k", "Socios activos"],

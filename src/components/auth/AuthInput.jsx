@@ -1,4 +1,4 @@
-// Reusable input with left icon and optional right button
+
 function AuthInput({ label, icon, rightElement, ...inputProps }) {
   return (
     <div className="mb-3">

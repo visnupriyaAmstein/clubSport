@@ -1,4 +1,3 @@
-// Reusable submit button for auth forms
 function AuthSubmitButton({ loading, label, loadingLabel }) {
   return (
     <button
